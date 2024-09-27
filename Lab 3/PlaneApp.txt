@@ -1,0 +1,59 @@
+package sce.sc2002.gwhm;
+
+import java.util.Scanner;
+
+public class PlaneApp {
+	public static void main(String[] args) {
+		
+		Plane plane = new Plane();
+		Scanner sc = new Scanner(System.in);
+
+		int value;
+		do {
+			System.out.println("(1) Show the number of empty seats");
+			System.out.println("(2) Show the list of empty seats");
+			System.out.println("(3) Show the list of customers together with their seat numbers in the order of the seat numbers");
+			System.out.println("(4) Show the list of customers together with their seat numbers in the order of the customer ID");
+			System.out.println("(5) Assign a customer to a seat");
+			System.out.println("(6) Remove a seat assignment");
+			System.out.println("(7) Exit");
+			System.out.println("Enter the number of your choice: ");
+			value = sc.nextInt();
+			
+			switch(value) {
+			case 1:
+				plane.showNumEmptySeats();
+				break;
+			case 2:
+				plane.showEmptySeats();
+				break;
+			case 3:
+				plane.showAssignedSeat(true);
+				break;
+			case 4:
+				plane.showAssignedSeat(false);
+				break;
+			case 5: //assign customer to a seat
+				System.out.println("Enter seat ID: ");
+				int seatid = sc.nextInt();
+				System.out.println("Enter customer ID: ");
+				int custid = sc.nextInt();
+				plane.assignSeat(seatid, custid);
+				break;
+			case 6: //remove seat assignment
+				System.out.println("Enter seat ID to unassign: ");
+				int UNseatID = sc.nextInt();
+				plane.unAssignSeat(UNseatID);
+				break;
+			case 7: 
+				System.out.println("Exiting the program");
+				break;
+			default:
+				System.out.println("Invalid option. Please try again.");
+			}
+		}while(value<7);
+		
+		sc.close(); //close scanner
+	}
+	
+}

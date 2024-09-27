@@ -1,0 +1,87 @@
+package sce.sc2002.gwhm;
+
+import java.util.Arrays;
+
+public class Plane {
+	PlaneSeat[] seats; //array of this plane seat object
+	int numEmptySeat;
+	
+	//constructor
+	public Plane() {
+		seats = new PlaneSeat[12]; //array with 12 objects created
+		//set id for each from 1 to 12
+		for(int i=0; i<12; i++) seats[i] = new PlaneSeat(i+1);
+		numEmptySeat = 12; //empty initially
+	}
+	
+	//method to sort seats in ascending order of customer id
+	public PlaneSeat[] sortSeats() {
+		PlaneSeat[] sorted = Arrays.copyOf(seats, seats.length);
+		Arrays.sort(sorted, (s1,s2) -> {
+			 int id1 = s1.isOccupied() ? s1.getCustomerID() : Integer.MAX_VALUE;
+		     int id2 = s2.isOccupied() ? s2.getCustomerID() : Integer.MAX_VALUE;
+		     return Integer.compare(id1, id2);
+		});
+
+		return sorted;
+	}
+	
+	//display number of empty seats
+	public void showNumEmptySeats() {
+		System.out.println("Number of empty seats: " + numEmptySeat);
+	}
+	
+	//display list of empty seats
+	public void showEmptySeats() {
+		StringBuilder emptySeats = new StringBuilder("Empty seats: ");
+		for(int n=0; n<seats.length; n++) {
+			if(!seats[n].isOccupied()) {
+				emptySeats.append(seats[n].getSeatID()).append(" ");
+			}
+		}
+		System.out.println(emptySeats.toString().trim());
+	}
+	
+	//display assigned seats w IDs
+	public void showAssignedSeat(boolean k) {
+		PlaneSeat[] sorted = k ? Arrays.copyOf(seats, seats.length) : sortSeats();
+		for(int p=0; p<sorted.length; p++) {
+			if(sorted[p].isOccupied()) System.out.println("Seat ID: " + sorted[p].getSeatID() + ", Customer ID: " + sorted[p].getCustomerID());
+		}
+	}
+	
+	//assign customer ID to empty seat
+	public void assignSeat(int seatID, int custID) {
+		//validity check
+		if(seatID < 1 | seatID > 12) {
+			System.out.println("Invalid seat ID");
+			return;
+		}
+		
+		PlaneSeat seat = seats[seatID - 1]; //adjust for 0-based index
+		if(!seat.isOccupied()) {
+			seat.assign(custID);
+			numEmptySeat--;
+			System.out.println("Assigned Customer ID: " + custID + " to Seat ID: " + seatID);
+		}
+		else System.out.println("Seat ID " + seatID + " is already assigned.");
+	}
+	
+	//unassigns a seat
+	public void unAssignSeat(int seatID) {
+		//validity check
+		if(seatID < 1 | seatID > 12) {
+			System.out.println("Invalid seat ID");
+			return;
+		}
+		
+		PlaneSeat seat = seats[seatID - 1]; //adjust for 0-based index
+		if(seat.isOccupied()) {
+			seat.unAssign();
+			numEmptySeat++;
+			System.out.println("Unassigned Seat ID: " + seatID);
+		}
+		else System.out.println("Seat ID " + seatID + " is alread unassigned.");
+		
+	}	
+}
